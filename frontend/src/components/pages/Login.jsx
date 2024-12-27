@@ -47,8 +47,8 @@ function Login() {
             <Image
                 borderRadius='full'
                 boxSize='150px'
-                src='/./logo.png'
-                alt='Dan Abramov'
+                src='/logo.png'
+                alt='Alcavega'
                 marginBottom={4}
             />
             <LoginForm/>
