@@ -1,29 +1,16 @@
 import express from 'express';
 import {connectDB} from './config/db.js';
-import User from './models/users.model.js';
-
+import userRoutes from './routes/user-routes.js';
+import authRoutes from './services/auth/auth-routes.js';
 const app = express();
 app.use(express.json());
 
 app.get('/', async (req, res) => {
-    connectDB();
     res.status(200).send('Hello World');
 })
 
-app.post('/user/', async (req, res) => {
-    const {name, password, isAdmin} = req.body;
-    const user = new User({
-        name,
-        password,
-        isAdmin
-    });
-    try {
-        const newUser = await user.save();
-        res.status(201).json(newUser);
-    } catch (error) {
-        res.status(500).json({error: error});
-    }
-});
+app.use('/auth', authRoutes);
+app.use('/api/user-service', userRoutes);
 
 app.listen(8080, async () => {
     await connectDB();
