@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import {cropsSchema} from './crops.model.js';
 
 const userSchema = mongoose.Schema({
     username:{
@@ -34,7 +33,8 @@ const userSchema = mongoose.Schema({
                 required: false
             },
             crops:{
-                type: [cropsSchema],
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Crop',
                 required: false
             }
             
