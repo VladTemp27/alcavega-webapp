@@ -5,8 +5,13 @@ import authRoutes from './services/auth/auth-routes.js';
 import authenticateToken from './services/auth/auth-middleware.js';
 import dotenv from 'dotenv'
 dotenv.config()
+
+import cors from 'cors';
+
+
 const app = express();
 app.use(express.json());
+app.use(cors({credentials: true, origin: '*' }))
 
 app.get('/', async (req, res) => {
     res.status(200).send('Hello World');
