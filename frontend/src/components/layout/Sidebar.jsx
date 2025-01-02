@@ -1,14 +1,19 @@
 import React from "react";
 import { Box, VStack, HStack, Icon, Text } from "@chakra-ui/react";
-import { FaHome, FaChartLine, FaCompass, FaStar, FaCog } from "react-icons/fa";
+import { FaHome, FaChartLine, FaCog } from "react-icons/fa";
+import { FaAddressBook, FaCashRegister } from "react-icons/fa6";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const menuItems = [
-    { icon: FaHome, label: "Home", onClick: () => console.log("Redirecting to Home...") },
-    { icon: FaChartLine, label: "Trending", onClick: () => console.log("Redirecting to Trending...") },
-    { icon: FaCompass, label: "Explore", onClick: () => console.log("Redirecting to Explore...") },
-    { icon: FaStar, label: "Favourites", onClick: () => console.log("Redirecting to Favourites...") },
-    { icon: FaCog, label: "Settings", onClick: () => console.log("Redirecting to Settings...") },
+    { icon: FaHome, label: "Home", path: "/" },
+    { icon: FaChartLine, label: "Transactions", path: "/transactions" },
+    { icon: FaCashRegister, label: "Create order", path: "/create-order" },
+    { icon: FaAddressBook, label: "Farmers", path: "/farmers" },
+    { icon: FaCog, label: "Settings", path: "/settings" },
   ];
 
   const brandGreen = "#3E854D"; // Main green from the logo
@@ -25,7 +30,7 @@ const Sidebar = () => {
     >
       <VStack align="start" spacing={6}>
         <Text fontSize="2xl" fontWeight="bold" color={brandGreen}>
-          Logo
+          Alcavega
         </Text>
         {menuItems.map((item) => (
           <HStack
@@ -34,7 +39,9 @@ const Sidebar = () => {
             p={2}
             borderRadius="md"
             cursor="pointer"
-            onClick={item.onClick} // Attach onClick event
+            onClick={() => navigate(item.path)} // Navigate to the path
+            bg={location.pathname === item.path ? brandGreen : "transparent"}
+            color={location.pathname === item.path ? "white" : "black"}
             _hover={{
               bg: brandGreen,
               color: "white",
