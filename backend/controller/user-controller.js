@@ -6,9 +6,12 @@ class UserController{
         var currentUsername =  req.params.username;
         try{
             const user = await User.findOne({username: currentUsername});
+            if(!user){
+                res.status(400).json({error: 'User not found'});
+            }
             res.status(200).json(user);
         }catch(error){
-            res.status(404).json({error: 'User not found'});
+            res.status(500).json({error: 'Server error'});
         }    
     }
     
