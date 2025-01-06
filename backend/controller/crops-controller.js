@@ -1,4 +1,4 @@
-import Crop from '../models/crop.model.js';
+import Crop from '../models/crops.model.js';
 
 class CropController{
     static async getCrops(req, res){
@@ -14,10 +14,13 @@ class CropController{
     }
 
     static async createCrop(req, res) {
+        console.log("Creating new crop record")
         const { crop_name, buyers } = req.body;
+        console.log(`CROP NAME: ${crop_name} with BUYERS: ${buyers}`)
         const newCrop = new Crop({ crop_name, buyers });
         try {
             const savedCrop = await newCrop.save();
+            console.log("Trying to save crop object")
             res.status(201).json(savedCrop);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -51,6 +54,27 @@ class CropController{
             res.status(200).json({message: 'Crop deleted '+`${crop}`});
         }catch(error){
             res.status(500).json({error: 'Server error'});
+        }
+    }
+
+    static async getBuyers(req,res){
+        const crop_id = req.params.crop_id
+
+        //User toleration for missing crop id
+        if(!crop_id){
+            res.status(400).json({message:"Invalid Request"})
+            return
+        }
+
+        try{
+            const buyers = await Crop.findOne({_id: crop_id}).select('buyers')
+            res.status(200).json(buyers)
+        }catch(error){
+            if(process.env.DEBUG_MODE == 'true'){
+                res.status(500).json({error_message: `Server error with: ${error}`})
+                return
+            }
+            res.status(500).json({error:"Server error"})
         }
     }
 
