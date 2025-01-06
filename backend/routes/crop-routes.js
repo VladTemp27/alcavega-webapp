@@ -1,5 +1,5 @@
 import express from 'express'
-import CropController from '../controller/crop-controller.js'
+import CropController from '../controller/crops-controller.js'
 
 const cropRoutes = express.Router()
 
