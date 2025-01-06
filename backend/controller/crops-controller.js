@@ -1,4 +1,5 @@
 import Crop from '../models/crops.model.js';
+const IS_DEBUG_MODE = process.env.DEBUG_MODE == 'true'
 
 class CropController{
     static async getCrops(req, res){
@@ -75,6 +76,27 @@ class CropController{
                 return
             }
             res.status(500).json({error:"Server error"})
+        }
+    }
+
+    static async editBuyers(req,res){
+        const crop_id = req.params.crop_id
+        const newBuyers = req.body.buyers
+        if(!crop_id || !buyers){
+            res.status(400).json({message:"invalid request"})
+        }
+
+        try{
+            const result = await Crop.fineOneAndUpdate({_id: crop_id},{buyers: newBuyers},{returnDocument:'after'})
+            res.status(200).json({message:"updated"})
+            console.log(result)
+        }catch(error){
+            if(IS_DEBUG_MODE){
+                res.status(500).json({server_error:error})
+                return
+            }
+
+            res.status(500).json({message:"Server error"})
         }
     }
 
