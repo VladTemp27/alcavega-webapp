@@ -20,6 +20,12 @@ class CropController{
         console.log(`CROP NAME: ${crop_name} with BUYERS: ${buyers}`)
         const newCrop = new Crop({ crop_name, buyers });
         try {
+
+            const current = await Crop.findOne({crop_name: newCrop.crop_name})
+            if(current){
+                res.status(400).json({message:"Crop already exists"})
+            }
+
             const savedCrop = await newCrop.save();
             console.log("Trying to save crop object")
             res.status(201).json(savedCrop);
@@ -97,6 +103,15 @@ class CropController{
             }
 
             res.status(500).json({message:"Server error"})
+        }
+    }
+
+    static async getCropNames(req,res){
+        try{
+            const cropNames = await Crop.find().select('_id crop_name');
+            res.status(200).json(cropNames)
+        }catch(error){
+            res.status(500).json({message:"Internal Server error"})
         }
     }
 
