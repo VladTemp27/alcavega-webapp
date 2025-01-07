@@ -10,6 +10,6 @@ cropRoutes.post('/crop', CropController.createCrop)
 cropRoutes.put('/crop/:crop_id', CropController.updateCrop)
 cropRoutes.delete('/crop/:crop_id', CropController.deleteCrop)
 cropRoutes.get('/buyers/:crop_id',CropController.getBuyers)
-cropRoutes.put('/buyers',CropController.editBuyers)
+cropRoutes.put('/buyers/:crop_id',CropController.updateBuyers)
 
 export default cropRoutes
