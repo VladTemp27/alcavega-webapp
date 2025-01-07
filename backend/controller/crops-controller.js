@@ -85,18 +85,18 @@ class CropController{
         }
     }
 
-    static async editBuyers(req,res){
+    static async updateBuyers(req,res){
         const crop_id = req.params.crop_id
         const newBuyers = req.body.buyers
-        if(!crop_id || !buyers){
+        if(!crop_id || !newBuyers){
             res.status(400).json({message:"invalid request"})
         }
 
         try{
-            const result = await Crop.fineOneAndUpdate({_id: crop_id},{buyers: newBuyers},{returnDocument:'after'})
-            res.status(200).json({message:"updated"})
-            console.log(result)
+            const result = await Crop.findOneAndUpdate({_id: crop_id},{buyers: newBuyers},{returnDocument:'after'})
+            res.status(200).json({message:"updated",updatedData: result})
         }catch(error){
+            console.log(error)
             if(IS_DEBUG_MODE){
                 res.status(500).json({server_error:error})
                 return
