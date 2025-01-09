@@ -37,7 +37,9 @@ class UserController{
 
     static async createUser(req,res){
         const {username, password, isAdmin, farmer_data} = req.body;
+        console.log(`PAYLOAD: ${username} ${password} ${isAdmin} ${farmer_data}`);
         const newUser = await UserController.createUserModel(username, password, isAdmin, farmer_data);
+        console.log(`NEW USER: ${newUser}`);
         try{
             if(await(User.findOne({username: newUser.username}))){
                 res.status(400).json({error: 'Username already exists'});
