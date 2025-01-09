@@ -9,7 +9,7 @@ class AuthController{
         try{
             const user = await User.findOne({ username: username })
             console.log(user)
-            if(password === user.password){
+            if(user.comparePassword(password)){
                 var genToken = jwt.sign({ username: user.username, isAdmin: user.isAdmin},process.env.SECRET_KEY,{expiresIn:'1d'})
                 console.log(genToken)
                 res.status(200).json({message: 'Login Successful', token: genToken})
