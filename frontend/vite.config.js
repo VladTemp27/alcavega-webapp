@@ -11,5 +11,8 @@ export default defineConfig({
         login: './login.html'
       }
     }
+  },
+  server:{
+    host: '0.0.0.0'
   }
 })
