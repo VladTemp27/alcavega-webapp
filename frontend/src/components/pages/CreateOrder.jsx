@@ -18,7 +18,7 @@ import {
     Heading,
     IconButton
 } from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, DeleteIcon } from '@chakra-ui/icons';
 
 function CreateOrder() {
     const [farmers, setFarmers] = useState([]);
@@ -48,6 +48,15 @@ function CreateOrder() {
         setCurrentKg('');
         setCurrentPrice('');
         setCurrentSize('');
+    };
+
+    const deleteBag = (farmerIndex, bagIndex) => {
+        const updatedFarmers = [...farmers];
+        updatedFarmers[farmerIndex].bags.splice(bagIndex, 1);
+        if (updatedFarmers[farmerIndex].bags.length === 0) {
+            updatedFarmers.splice(farmerIndex, 1);
+        }
+        setFarmers(updatedFarmers);
     };
 
     const calculateTotalPrice = (bags) => {
@@ -138,6 +147,7 @@ function CreateOrder() {
                                         <Th>Price per Kg</Th>
                                         <Th>Size Classification</Th>
                                         <Th>Total Price</Th>
+                                        <Th>Action</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -148,6 +158,13 @@ function CreateOrder() {
                                             <Td>{bag.price}</Td>
                                             <Td>{bag.size}</Td>
                                             <Td>{bag.kg * bag.price}</Td>
+                                            <Td>
+                                                <IconButton
+                                                    icon={<DeleteIcon />}
+                                                    onClick={() => deleteBag(index, bagIndex)}
+                                                    aria-label="Delete Bag"
+                                                />
+                                            </Td>
                                         </Tr>
                                     ))}
                                 </Tbody>
