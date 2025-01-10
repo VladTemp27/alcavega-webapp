@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, VStack, HStack, Icon, Text } from "@chakra-ui/react";
 import { FaHome, FaChartLine, FaCog } from "react-icons/fa";
-import { FaAddressBook, FaCashRegister } from "react-icons/fa6";
+import { FaAddressBook, FaCashRegister, FaAppleWhole } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -12,6 +12,7 @@ const Sidebar = () => {
     { icon: FaHome, label: "Home", path: "/" },
     { icon: FaChartLine, label: "Transactions", path: "/transactions" },
     { icon: FaCashRegister, label: "Create order", path: "/create-order" },
+    { icon: FaAppleWhole, label: "Crops", path: "/crops" },
     { icon: FaAddressBook, label: "Farmers", path: "/farmers" },
     { icon: FaCog, label: "Settings", path: "/settings" },
   ];
