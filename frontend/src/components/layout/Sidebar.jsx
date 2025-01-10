@@ -28,6 +28,9 @@ const Sidebar = () => {
       p={4}
       borderRight="1px solid"
       borderColor="gray.200"
+      position="sticky"
+      top="0"
+      overflowY="auto"
     >
       <VStack align="start" spacing={6}>
         <Text fontSize="2xl" fontWeight="bold" color={brandGreen}>
