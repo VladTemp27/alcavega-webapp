@@ -24,6 +24,7 @@ import { ChevronDownIcon, ChevronUpIcon, DeleteIcon } from '@chakra-ui/icons';
 function CreateOrder() {
     const [farmers, setFarmers] = useState([]);
     const [farmerOptions, setFarmerOptions] = useState([]);
+    const [cropOptions, setCropOptions] = useState([]);
     const [currentFarmer, setCurrentFarmer] = useState('');
     const [currentCrop, setCurrentCrop] = useState('');
     const [currentKg, setCurrentKg] = useState('');
@@ -49,7 +50,25 @@ function CreateOrder() {
             }
         };
 
+        const fetchCrops = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/crop-service/crops');
+                if (Array.isArray(response.data)) {
+                    const formattedCrops = response.data.map(crop => ({
+                        id: crop._id,
+                        name: crop.crop_name
+                    }));
+                    setCropOptions(formattedCrops);
+                } else {
+                    console.error('Error: API response is not an array');
+                }
+            } catch (error) {
+                console.error('Error fetching crops:', error);
+            }
+        };
+
         fetchFarmers();
+        fetchCrops();
     }, []);
 
     const addBag = () => {
@@ -115,9 +134,11 @@ function CreateOrder() {
                         onChange={(e) => setCurrentCrop(e.target.value)}
                         placeholder="Select crop"
                     >
-                        <option value="Wheat">Wheat</option>
-                        <option value="Corn">Corn</option>
-                        <option value="Rice">Rice</option>
+                        {cropOptions.map(crop => (
+                            <option key={crop.id} value={crop.name}>
+                                {crop.name}
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
                 <FormControl>
