@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
     Box,
     Button,
@@ -22,6 +23,7 @@ import { ChevronDownIcon, ChevronUpIcon, DeleteIcon } from '@chakra-ui/icons';
 
 function CreateOrder() {
     const [farmers, setFarmers] = useState([]);
+    const [farmerOptions, setFarmerOptions] = useState([]);
     const [currentFarmer, setCurrentFarmer] = useState('');
     const [currentCrop, setCurrentCrop] = useState('');
     const [currentKg, setCurrentKg] = useState('');
@@ -29,17 +31,39 @@ function CreateOrder() {
     const [currentSize, setCurrentSize] = useState('');
     const [openFarmer, setOpenFarmer] = useState(null);
 
+    useEffect(() => {
+        const fetchFarmers = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/farmer-service/farmers');
+                if (Array.isArray(response.data)) {
+                    const formattedFarmers = response.data.map(farmer => ({
+                        id: farmer._id,
+                        name: `${farmer.farmer_data.first_name} ${farmer.farmer_data.last_name}`
+                    }));
+                    setFarmerOptions(formattedFarmers);
+                } else {
+                    console.error('Error: API response is not an array');
+                }
+            } catch (error) {
+                console.error('Error fetching farmers:', error);
+            }
+        };
+
+        fetchFarmers();
+    }, []);
+
     const addBag = () => {
         if (!currentFarmer || !currentCrop || !currentKg || !currentPrice || !currentSize) return;
 
         setFarmers(prevFarmers => {
-            const farmerIndex = prevFarmers.findIndex(farmer => farmer.name === currentFarmer);
+            const farmerIndex = prevFarmers.findIndex(farmer => farmer.id === currentFarmer);
             if (farmerIndex > -1) {
                 const updatedFarmers = [...prevFarmers];
                 updatedFarmers[farmerIndex].bags.push({ crop: currentCrop, kg: currentKg, price: currentPrice, size: currentSize });
                 return updatedFarmers;
             } else {
-                return [...prevFarmers, { name: currentFarmer, bags: [{ crop: currentCrop, kg: currentKg, price: currentPrice, size: currentSize }] }];
+                const selectedFarmer = farmerOptions.find(farmer => farmer.id === currentFarmer);
+                return [...prevFarmers, { id: currentFarmer, name: selectedFarmer.name, bags: [{ crop: currentCrop, kg: currentKg, price: currentPrice, size: currentSize }] }];
             }
         });
 
@@ -72,11 +96,17 @@ function CreateOrder() {
             <VStack spacing={4} align="stretch">
                 <FormControl>
                     <FormLabel>Farmer Name</FormLabel>
-                    <Input
+                    <Select
                         value={currentFarmer}
                         onChange={(e) => setCurrentFarmer(e.target.value)}
-                        placeholder="Enter farmer name"
-                    />
+                        placeholder="Select farmer"
+                    >
+                        {farmerOptions.map(farmer => (
+                            <option key={farmer.id} value={farmer.id}>
+                                {farmer.name}
+                            </option>
+                        ))}
+                    </Select>
                 </FormControl>
                 <FormControl>
                     <FormLabel>Crop</FormLabel>
