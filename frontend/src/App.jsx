@@ -7,6 +7,7 @@ import Transactions from './components/pages/Transactions';
 import CreateOrder from './components/pages/CreateOrder';
 import Farmers from './components/pages/Farmers';
 import Settings from './components/pages/Settings';
+import Crops from './components/pages/Crops'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/create-order" element={<CreateOrder/>} />
           <Route path="/farmers" element={<Farmers/>} />
           <Route path="/settings" element={<Settings/>} />
+          <Route path="/crops" element={<Crops/>} />
         </Routes>
       </Box>
     </Flex>
