@@ -224,6 +224,20 @@ function CreateOrder() {
                     </Box>
                 ))}
             </Box>
+
+            {farmers.length > 0 && (
+                <Button 
+                    mt={4} 
+                    colorScheme="green" 
+                    size="lg" 
+                    onClick={() => {
+                        // Add your receipt creation logic here
+                        console.log("Creating receipts for:", farmers);
+                    }}
+                >
+                    Create Receipts
+                </Button>
+            )}
         </Box>
     );
 }
