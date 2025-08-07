@@ -3,7 +3,11 @@ import mongoUtil from './v1/util/mongoUtil';
 const app = express();
 app.use(express.json());
 
+import v1Router from './v1/v1Router';
+
 const PORT = process.env.PORT || 2000;
+
+app.use('/api/v1', v1Router);
 
 try{
     await mongoUtil.connect();
