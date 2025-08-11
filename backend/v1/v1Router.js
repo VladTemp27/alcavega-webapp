@@ -1,8 +1,8 @@
 import express from 'express';
-import userRoutes from './routes/userRoutes';
-import customerRoutes from './routes/customerRoutes';
-import deliveryRoutes from './routes/deliveryRoutes';
-import supplierRoutes from './routes/supplierRoutes';
+import userRoutes from './routes/userRoutes.js';
+import customerRoutes from './routes/customerRoutes.js';
+import deliveryRoutes from './routes/deliveryRoutes.js';
+import supplierRoutes from './routes/supplierRoutes.js';
 
 const v1Router = express.Router();
 v1Router.use(express.json());

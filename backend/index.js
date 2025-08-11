@@ -1,9 +1,9 @@
 import express from 'express';
-import mongoUtil from './v1/util/mongoUtil';
+import mongoUtil from './v1/util/mongoUtil.js';
 const app = express();
 app.use(express.json());
 
-import v1Router from './v1/v1Router';
+import v1Router from './v1/v1Router.js';
 
 const PORT = process.env.PORT || 2000;
 

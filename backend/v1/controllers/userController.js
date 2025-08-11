@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import User from '../models/userModel';
+import User from '../models/userModel.js';
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req, res) => {
     try {
         const user = new User(req.body);
         const savedUser = await user.save();
@@ -10,7 +9,7 @@ export const createUser = async (req: Request, res: Response) => {
             data: savedUser,
             message: 'User created successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error creating user',
@@ -19,7 +18,7 @@ export const createUser = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find().populate('crops');
         res.status(200).json({
@@ -27,7 +26,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
             data: users,
             count: users.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching users',
@@ -36,7 +35,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('crops');
         if (!user) {
@@ -49,7 +48,7 @@ export const getUserById = async (req: Request, res: Response) => {
             success: true,
             data: user
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching user',
@@ -58,7 +57,7 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 };
 
-export const getUserByClerkId = async (req: Request, res: Response) => {
+export const getUserByClerkId = async (req, res) => {
     try {
         const user = await User.findOne({ clerkId: req.params.clerkId }).populate('crops');
         if (!user) {
@@ -71,7 +70,7 @@ export const getUserByClerkId = async (req: Request, res: Response) => {
             success: true,
             data: user
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching user by Clerk ID',
@@ -80,7 +79,7 @@ export const getUserByClerkId = async (req: Request, res: Response) => {
     }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.id,
@@ -100,7 +99,7 @@ export const updateUser = async (req: Request, res: Response) => {
             data: user,
             message: 'User updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating user',
@@ -109,7 +108,7 @@ export const updateUser = async (req: Request, res: Response) => {
     }
 };
 
-export const updateUserByClerkId = async (req: Request, res: Response) => {
+export const updateUserByClerkId = async (req, res) => {
     try {
         const user = await User.findOneAndUpdate(
             { clerkId: req.params.clerkId },
@@ -129,7 +128,7 @@ export const updateUserByClerkId = async (req: Request, res: Response) => {
             data: user,
             message: 'User updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating user',
@@ -138,7 +137,7 @@ export const updateUserByClerkId = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
@@ -151,7 +150,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             success: true,
             message: 'User deleted successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error deleting user',
@@ -160,7 +159,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export const addCropToUser = async (req: Request, res: Response) => {
+export const addCropToUser = async (req, res) => {
     try {
         const { cropId } = req.body;
         const user = await User.findByIdAndUpdate(
@@ -181,7 +180,7 @@ export const addCropToUser = async (req: Request, res: Response) => {
             data: user,
             message: 'Crop added to user successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error adding crop to user',
@@ -190,7 +189,7 @@ export const addCropToUser = async (req: Request, res: Response) => {
     }
 };
 
-export const removeCropFromUser = async (req: Request, res: Response) => {
+export const removeCropFromUser = async (req, res) => {
     try {
         const { cropId } = req.body;
         const user = await User.findByIdAndUpdate(
@@ -211,11 +210,18 @@ export const removeCropFromUser = async (req: Request, res: Response) => {
             data: user,
             message: 'Crop removed from user successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error removing crop from user',
             error: error.message
         });
     }
+};
+
+export const healthCheck = (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'API is working'
+    });
 };

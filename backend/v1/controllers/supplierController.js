@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import Supplier from '../models/supplierModel';
+import Supplier from '../models/supplierModel.js';
 
-export const createSupplier = async (req: Request, res: Response) => {
+export const createSupplier = async (req, res) => {
     try {
         const supplier = new Supplier(req.body);
         const savedSupplier = await supplier.save();
@@ -10,7 +9,7 @@ export const createSupplier = async (req: Request, res: Response) => {
             data: savedSupplier,
             message: 'Supplier created successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error creating supplier',
@@ -19,7 +18,7 @@ export const createSupplier = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllSuppliers = async (req: Request, res: Response) => {
+export const getAllSuppliers = async (req, res) => {
     try {
         const suppliers = await Supplier.find();
         res.status(200).json({
@@ -27,7 +26,7 @@ export const getAllSuppliers = async (req: Request, res: Response) => {
             data: suppliers,
             count: suppliers.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching suppliers',
@@ -36,7 +35,7 @@ export const getAllSuppliers = async (req: Request, res: Response) => {
     }
 };
 
-export const getSupplierById = async (req: Request, res: Response) => {
+export const getSupplierById = async (req, res) => {
     try {
         const supplier = await Supplier.findById(req.params.id);
         if (!supplier) {
@@ -49,7 +48,7 @@ export const getSupplierById = async (req: Request, res: Response) => {
             success: true,
             data: supplier
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching supplier',
@@ -58,7 +57,7 @@ export const getSupplierById = async (req: Request, res: Response) => {
     }
 };
 
-export const updateSupplier = async (req: Request, res: Response) => {
+export const updateSupplier = async (req, res) => {
     try {
         const supplier = await Supplier.findByIdAndUpdate(
             req.params.id,
@@ -76,7 +75,7 @@ export const updateSupplier = async (req: Request, res: Response) => {
             data: supplier,
             message: 'Supplier updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating supplier',
@@ -85,7 +84,7 @@ export const updateSupplier = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteSupplier = async (req: Request, res: Response) => {
+export const deleteSupplier = async (req, res) => {
     try {
         const supplier = await Supplier.findByIdAndDelete(req.params.id);
         if (!supplier) {
@@ -98,7 +97,7 @@ export const deleteSupplier = async (req: Request, res: Response) => {
             success: true,
             message: 'Supplier deleted successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error deleting supplier',
@@ -107,7 +106,7 @@ export const deleteSupplier = async (req: Request, res: Response) => {
     }
 };
 
-export const getSuppliersByCrop = async (req: Request, res: Response) => {
+export const getSuppliersByCrop = async (req, res) => {
     try {
         const { crop } = req.params;
         const suppliers = await Supplier.find({ 
@@ -119,11 +118,18 @@ export const getSuppliersByCrop = async (req: Request, res: Response) => {
             data: suppliers,
             count: suppliers.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching suppliers by crop',
             error: error.message
         });
     }
+};
+
+export const healthCheck = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API is working",
+  });
 };

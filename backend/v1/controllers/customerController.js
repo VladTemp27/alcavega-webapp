@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import Customer from '../models/customerModel';
+import Customer from '../models/customerModel.js';
 
-export const createCustomer = async (req: Request, res: Response) => {
+export const createCustomer = async (req, res) => {
     try {
         const customer = new Customer(req.body);
         const savedCustomer = await customer.save();
@@ -10,7 +9,7 @@ export const createCustomer = async (req: Request, res: Response) => {
             data: savedCustomer,
             message: 'Customer created successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error creating customer',
@@ -19,7 +18,7 @@ export const createCustomer = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllCustomers = async (req: Request, res: Response) => {
+export const getAllCustomers = async (req, res) => {
     try {
         const customers = await Customer.find();
         res.status(200).json({
@@ -27,7 +26,7 @@ export const getAllCustomers = async (req: Request, res: Response) => {
             data: customers,
             count: customers.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching customers',
@@ -36,7 +35,7 @@ export const getAllCustomers = async (req: Request, res: Response) => {
     }
 };
 
-export const getCustomerById = async (req: Request, res: Response) => {
+export const getCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findById(req.params.id);
         if (!customer) {
@@ -49,7 +48,7 @@ export const getCustomerById = async (req: Request, res: Response) => {
             success: true,
             data: customer
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching customer',
@@ -58,7 +57,7 @@ export const getCustomerById = async (req: Request, res: Response) => {
     }
 };
 
-export const updateCustomer = async (req: Request, res: Response) => {
+export const updateCustomer = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndUpdate(
             req.params.id,
@@ -76,7 +75,7 @@ export const updateCustomer = async (req: Request, res: Response) => {
             data: customer,
             message: 'Customer updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating customer',
@@ -85,7 +84,7 @@ export const updateCustomer = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteCustomer = async (req: Request, res: Response) => {
+export const deleteCustomer = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (!customer) {
@@ -98,11 +97,18 @@ export const deleteCustomer = async (req: Request, res: Response) => {
             success: true,
             message: 'Customer deleted successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error deleting customer',
             error: error.message
         });
     }
+};
+
+export const healthCheck = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API is working",
+  });
 };

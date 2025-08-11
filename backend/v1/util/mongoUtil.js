@@ -1,19 +1,20 @@
 import mongoose from 'mongoose';
 
 class MongoUtil {
-    private static instance: MongoUtil;
-    private isConnected: boolean = false;
+    static instance;
 
-    private constructor() {}
+    constructor() {
+        this.isConnected = false;
+    }
 
-    public static getInstance(): MongoUtil {
+    static getInstance() {
         if (!MongoUtil.instance) {
             MongoUtil.instance = new MongoUtil();
         }
         return MongoUtil.instance;
     }
 
-    public async connect(): Promise<void> {
+    async connect() {
         if (this.isConnected) {
             console.log('Already connected to MongoDB');
             return;
@@ -38,7 +39,7 @@ class MongoUtil {
         }
     }
 
-    public async disconnect(): Promise<void> {
+    async disconnect() {
         if (!this.isConnected) {
             return;
         }
@@ -53,7 +54,7 @@ class MongoUtil {
         }
     }
 
-    public getConnectionStatus(): boolean {
+    getConnectionStatus() {
         return this.isConnected;
     }
 }

@@ -5,6 +5,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - backend_node_modules:/app/node_modules
     environment:
       - NODE_ENV=production
       - MONGO_URI=mongodb://admin:password123@mongo:27017/alcavega?authSource=admin
@@ -46,6 +49,7 @@ services:
 
 volumes:
   mongo_data:
+  backend_node_modules:
 
 networks:
   alcavega_network:

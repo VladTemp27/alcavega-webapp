@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import Delivery from '../models/deliveryModel';
+import Delivery from '../models/deliveryModel.js';
 
-export const createDelivery = async (req: Request, res: Response) => {
+export const createDelivery = async (req, res) => {
     try {
         const delivery = new Delivery(req.body);
         const savedDelivery = await delivery.save();
@@ -17,7 +16,7 @@ export const createDelivery = async (req: Request, res: Response) => {
             data: populatedDelivery,
             message: 'Delivery created successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error creating delivery',
@@ -26,7 +25,7 @@ export const createDelivery = async (req: Request, res: Response) => {
     }
 };
 
-export const getAllDeliveries = async (req: Request, res: Response) => {
+export const getAllDeliveries = async (req, res) => {
     try {
         const deliveries = await Delivery.find()
             .populate('from', 'name email')
@@ -39,7 +38,7 @@ export const getAllDeliveries = async (req: Request, res: Response) => {
             data: deliveries,
             count: deliveries.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching deliveries',
@@ -48,7 +47,7 @@ export const getAllDeliveries = async (req: Request, res: Response) => {
     }
 };
 
-export const getDeliveryById = async (req: Request, res: Response) => {
+export const getDeliveryById = async (req, res) => {
     try {
         const delivery = await Delivery.findById(req.params.id)
             .populate('from', 'name email')
@@ -66,7 +65,7 @@ export const getDeliveryById = async (req: Request, res: Response) => {
             success: true,
             data: delivery
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching delivery',
@@ -75,7 +74,7 @@ export const getDeliveryById = async (req: Request, res: Response) => {
     }
 };
 
-export const updateDelivery = async (req: Request, res: Response) => {
+export const updateDelivery = async (req, res) => {
     try {
         const delivery = await Delivery.findByIdAndUpdate(
             req.params.id,
@@ -98,7 +97,7 @@ export const updateDelivery = async (req: Request, res: Response) => {
             data: delivery,
             message: 'Delivery updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating delivery',
@@ -107,7 +106,7 @@ export const updateDelivery = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteDelivery = async (req: Request, res: Response) => {
+export const deleteDelivery = async (req, res) => {
     try {
         const delivery = await Delivery.findByIdAndDelete(req.params.id);
         if (!delivery) {
@@ -121,7 +120,7 @@ export const deleteDelivery = async (req: Request, res: Response) => {
             success: true,
             message: 'Delivery deleted successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error deleting delivery',
@@ -130,7 +129,7 @@ export const deleteDelivery = async (req: Request, res: Response) => {
     }
 };
 
-export const updateDeliveryStatus = async (req: Request, res: Response) => {
+export const updateDeliveryStatus = async (req, res) => {
     try {
         const { status } = req.body;
         const validStatuses = ['pending', 'in-transit', 'unloading', 'completed'];
@@ -160,7 +159,7 @@ export const updateDeliveryStatus = async (req: Request, res: Response) => {
             data: delivery,
             message: 'Delivery status updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating delivery status',
@@ -169,7 +168,7 @@ export const updateDeliveryStatus = async (req: Request, res: Response) => {
     }
 };
 
-export const updatePaymentStatus = async (req: Request, res: Response) => {
+export const updatePaymentStatus = async (req, res) => {
     try {
         const { paymentStatus } = req.body;
         const validStatuses = ['paid', 'unpaid'];
@@ -199,7 +198,7 @@ export const updatePaymentStatus = async (req: Request, res: Response) => {
             data: delivery,
             message: 'Payment status updated successfully'
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(400).json({
             success: false,
             message: 'Error updating payment status',
@@ -208,7 +207,7 @@ export const updatePaymentStatus = async (req: Request, res: Response) => {
     }
 };
 
-export const getDeliveriesByUser = async (req: Request, res: Response) => {
+export const getDeliveriesByUser = async (req, res) => {
     try {
         const deliveries = await Delivery.find({ from: req.params.userId })
             .populate('to', 'name address phone')
@@ -220,11 +219,18 @@ export const getDeliveriesByUser = async (req: Request, res: Response) => {
             data: deliveries,
             count: deliveries.length
         });
-    } catch (error: any) {
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Error fetching user deliveries',
             error: error.message
         });
     }
+};
+
+export const healthCheck = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API is working",
+  });
 };
